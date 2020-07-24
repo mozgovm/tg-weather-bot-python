@@ -7,6 +7,3 @@ import telebot
 
 bot = telebot.TeleBot(BOT_TOKEN)
 
-url = f'https://mmozgov-python-weather-bot.herokuapp.com/weather_bot{BOT_TOKEN}'
-bot.remove_webhook()
-bot.set_webhook(url=url)

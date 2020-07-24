@@ -163,11 +163,26 @@ def reply_for_location(message):
 
 
 # bot.polling()
-app = Flask(__name__)
+server = Flask(__name__)
 
 
-@app.route(f'/weather_bot{BOT_TOKEN}', methods=['POST'])
-def webhook():
+@server.route(f'/weather_bot{BOT_TOKEN}', methods=['POST'])
+def get_message():
     update = types.Update.de_json(request.stream.read().decode('utf-8'))
     bot.process_new_updates([update])
     return 'OK', 200
+
+
+@server.route('/')
+def webhook():
+    url = f'https://mmozgov-python-weather-bot.herokuapp.com/weather_bot{BOT_TOKEN}'
+    bot.remove_webhook()
+    bot.set_webhook(url=url)
+    return 'OK', 200
+
+
+if __name__ == "__main__":
+    PORT = int(os.environ.get('PORT', 5000))
+    server.run(host="0.0.0.0", port=PORT)
+    print(f'Server is listening on {PORT}')
+
